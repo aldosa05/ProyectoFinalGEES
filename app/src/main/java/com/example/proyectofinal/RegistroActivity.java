@@ -39,51 +39,64 @@ public class RegistroActivity extends AppCompatActivity {
         etConfirmarPassword = findViewById(R.id.etConfirmarPassword);
 
     }
-/*
+
     public void registrarUsuario(View view) {
 
-        String usuario = etUsuario.getText().toString();
-        String email = etCorreo.getText().toString();
-        String contrasena = etPassword.getText().toString();
-        String confirmarContrasena = etConfirmarPassword.getText().toString();
+        String usuario = etUsuario.getText().toString().trim();
+        String correo = etCorreo.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        String confirmarPassword = etConfirmarPassword.getText().toString().trim();
 
-        if (usuario.isEmpty() || email.isEmpty() || contrasena.isEmpty() || confirmarContrasena.isEmpty()) {
-            Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
+        // Validaciones básicas
+        if (TextUtils.isEmpty(usuario) || TextUtils.isEmpty(correo) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmarPassword)) {
+            Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!contrasena.equals(confirmarContrasena)) {
+        if (!password.equals(confirmarPassword)) {
             Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Crear el objeto Usuario con los datos del formulario
-        Usuario usuarioRequest = new Usuario();
-        //usuarioRequest.setUsuario(usuario);
-        usuarioRequest.setCorreo(email);
-        usuarioRequest.setContrasena(contrasena);
+        // Crear objeto usuario
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setNombre(usuario);
+        nuevoUsuario.setCorreo(correo);
+        nuevoUsuario.setContrasena(password);
 
-        // Llamar al servicio Retrofit para hacer la solicitud de registro
-        ApiService apiService = ApiClient.getApiService();
-        Call<String> call = apiService.register(usuarioRequest);
+        // Llamar al backend
+        ApiService apiService = RetrofitClient.getApiService();
+        Call<Void> call = apiService.registrarUsuario(nuevoUsuario);
 
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(RegistroActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
-                    finish();  // Regresar al login
+                    // Volver al login
+                    Intent intent = new Intent(RegistroActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
-                    Toast.makeText(RegistroActivity.this, "Error al registrar el usuario", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegistroActivity.this, "Error al registrar. Inténtalo de nuevo.", Toast.LENGTH_SHORT).show();
+                    Log.e("Registro", "Error en la respuesta: " + response.code());
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Toast.makeText(RegistroActivity.this, "Error de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(RegistroActivity.this, "Fallo de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("Registro", "Fallo en la llamada", t);
             }
         });
-    }*/
+    }
+
+    public void irAIniciarSesion(View view) {
+
+        Intent intent = new Intent(RegistroActivity.this, MainActivity.class);
+        startActivity(intent);
+
+    }
 }
 
 

@@ -97,5 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void recuperarContrasena(View view) {
+        Intent intent = new Intent(MainActivity.this, CambiarContrasenaActivity.class); // Redirige a la actividad de registro
+        startActivity(intent);
     }
 }
