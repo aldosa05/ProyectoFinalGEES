@@ -1,10 +1,12 @@
 package com.example.proyectofinal;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -13,18 +15,19 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-
-
-
 public class MainActivity extends AppCompatActivity {
 
     private EditText etUsuario, etPassword;
-
+    Usuario loginUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,47 +43,48 @@ public class MainActivity extends AppCompatActivity {
         etUsuario  = findViewById(R.id.etUsuario);
         etPassword = findViewById(R.id.etPassword);
 
-
     }
 
     public void iniciarSesion(View view) {
+
         String correo = etUsuario.getText().toString().trim();
         String contrasena = etPassword.getText().toString().trim();
-        System.out.println("🟢 Botón pulsado correctamente");
-        System.out.println("📧 Correo introducido: " + correo);
-        System.out.println("🔒 Contraseña introducida: " + contrasena);
+
         if (correo.isEmpty() || contrasena.isEmpty()) {
             Toast.makeText(this, "Por favor, ingresa correo y contraseña", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Crear objeto Usuario con los datos introducidos
-        Usuario usuario = new Usuario();
-        usuario.setCorreo(correo);
-        usuario.setContrasena(contrasena);
+        Log.d("LOGIN", "🟢 Botón pulsado correctamente");
+        Log.d("LOGIN", "📧 Correo introducido: " + correo);
+        Log.d("LOGIN", "🔒 Contraseña introducida: " + contrasena);
 
-        // Hacer la solicitud de login al backend
-        ApiService apiService = RetrofitClient.getApiService();
+        loginUser = new Usuario();
+        loginUser.setCorreo(correo);
+        loginUser.setContrasena(contrasena);
 
-        Call<Usuario> call = apiService.login(usuario);
-
-        call.enqueue(new Callback<Usuario>() {
+        ApiService api = RetrofitClient.getApiService();
+        api.login(loginUser).enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Usuario usuarioLogueado = response.body();
-                    System.out.println("🟢 Login exitoso. Nombre: " + usuarioLogueado.getNombre());
-                    Toast.makeText(MainActivity.this, "Bienvenido " + usuarioLogueado.getNombre(), Toast.LENGTH_SHORT).show();
-
-                    // Ir a la siguiente pantalla
+                    Usuario usuario = response.body();
+                    Log.d("LOGIN", "🧠 Usuario recibido: " + usuario.toString());
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                    intent.putExtra("id_usuario", usuario.getId());
+                    intent.putExtra("nombre_usuario", usuario.getNombre());
+                    intent.putExtra("correo_usuario", usuario.getCorreo());
+                    Log.d("LOGIN", "📦 Enviando a Home: " +
+                            "id=" + usuario.getId() + ", nombre=" + usuario.getNombre() + ", correo=" + usuario.getCorreo());
+
                     startActivity(intent);
-                    finish();
+
+                } else if (response.code() == 401) {
+                    Toast.makeText(MainActivity.this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                } else if (response.code() == 404) {
+                    Toast.makeText(MainActivity.this, "Correo no registrado", Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("LOGIN", "🔴 Fallo login.");
-                    Log.d("LOGIN", "Código HTTP: " + response.code());
-                    Log.d("LOGIN", "Body es null: " + (response.body() == null));
-                    Toast.makeText(MainActivity.this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Error inesperado: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -92,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void irARegistro(View view) {
+        Log.d("INTENTS", "⚠️ irARegistro() llamado");
         Intent intent = new Intent(MainActivity.this, RegistroActivity.class); // Redirige a la actividad de registro
         startActivity(intent);
     }

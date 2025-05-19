@@ -24,21 +24,21 @@
             android:id="@+id/tvTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
             android:text="GEES"
-            android:textSize="36sp"
-            android:textStyle="bold"
             android:textColor="#2196F3"
-            android:layout_marginBottom="40dp" />
+            android:textSize="80sp"
+            android:textStyle="bold" />
 
         <!-- Usuario -->
         <EditText
             android:id="@+id/etUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Usuario"
-            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:hint="Correo"
             android:inputType="text"
-            android:layout_marginBottom="16dp" />
+            android:padding="12dp" />
 
         <!-- Contraseña -->
         <EditText
@@ -62,29 +62,37 @@
             android:onClick="iniciarSesion"
             android:layout_marginBottom="20dp" />
 
-        <!-- Texto clicable: ¿Has olvidado tu contraseña? -->
-        <TextView
-            android:id="@+id/tvOlvidado"
+        <!-- Botón: ¿Has olvidado tu contraseña? -->
+        <Button
+            android:id="@+id/btnOlvidado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="¿Has olvidado tu contraseña?"
             android:textColor="#FF6F4D"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:clickable="true"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:padding="0dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
             android:onClick="recuperarContrasena"
             android:layout_marginBottom="16dp" />
 
-        <!-- Texto clicable: ¿No tienes cuenta? Regístrate -->
-        <TextView
-            android:id="@+id/tvRegistrate"
+        <!-- Botón: ¿No tienes cuenta? Regístrate -->
+        <Button
+            android:id="@+id/btnRegistrate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="¿No tienes cuenta? Regístrate"
             android:textColor="#4CAF50"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:clickable="true"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:padding="0dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
             android:onClick="irARegistro" />
 
     </LinearLayout>
