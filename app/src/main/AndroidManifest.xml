@@ -38,6 +38,18 @@
             android:name=".CambiarContrasenaActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".AnyadirEquipoActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".UnirseEquipoActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".HorarioActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

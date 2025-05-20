@@ -28,4 +28,10 @@ public interface ApiService {
     @GET("api/usuariosEquipos/usuario/{idUsuario}/equiposInfo")
     Call<List<UsuarioEquipoDTO>> getEquiposInfo(@Path("idUsuario") int idUsuario);
 
+    @POST("api/equipos/crear")
+    Call<Equipo> crearEquipo(@Body CrearEquipoDTO crearEquipoDTO);
+
+    @POST("api/equipos/unirse")
+    Call<Void> unirseAEquipo(@Body UnirseEquipoDTO dto);
+
 }

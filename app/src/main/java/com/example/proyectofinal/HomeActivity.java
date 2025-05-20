@@ -1,5 +1,6 @@
 package com.example.proyectofinal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -103,9 +104,18 @@ public class HomeActivity extends AppCompatActivity {
         // Intent a la pantalla de detalle de equipo...
     }
 
-    public void AnyadirGrupo(View view) {
+
+    public void AnyadirEquipo(View view) {
+
+        Intent intent = new Intent(HomeActivity.this, AnyadirEquipoActivity.class);
+        intent.putExtra("idUsuario", idUsuario);
+        startActivity(intent);
+
     }
 
-    public void UnirseGrupo(View view) {
+    public void UnirseEquipo(View view) {
+        Intent intent = new Intent(HomeActivity.this, UnirseEquipoActivity.class);
+        intent.putExtra("idUsuario", idUsuario);
+        startActivity(intent);
     }
 }

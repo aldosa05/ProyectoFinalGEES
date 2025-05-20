@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void irARegistro(View view) {
-        Log.d("INTENTS", "⚠️ irARegistro() llamado");
         Intent intent = new Intent(MainActivity.this, RegistroActivity.class); // Redirige a la actividad de registro
         startActivity(intent);
     }

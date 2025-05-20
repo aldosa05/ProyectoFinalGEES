@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">ProyectoFinal</string>
+    <string-array name="deportes_array">
+        <item>Fútbol</item>
+        <item>Fútbol sala</item>
+        <item>Baloncesto</item>
+    </string-array>
+
+    <string-array name="categorias_array">
+        <item>Prebenjamín (5-8 años)</item>
+        <item>Benjamín (9-10 años)</item>
+        <item>Alevín (11-12 años)</item>
+        <item>Infantil (13-14 años)</item>
+        <item>Cadete (15-16 años)</item>
+        <item>Juvenil (17-19 años)</item>
+        <item>Senior (+19)</item>
+    </string-array>
 </resources>
