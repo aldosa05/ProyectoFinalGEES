@@ -24,6 +24,8 @@ import retrofit2.Response;
 public class HomeActivity extends AppCompatActivity {
     private LinearLayout llEquipos;
     private int idUsuario;
+    UsuarioEquipoDTO dto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,18 +93,29 @@ public class HomeActivity extends AppCompatActivity {
             tvNombre.setText(dto.getNombreEquipo() != null ? dto.getNombreEquipo() : "Equipo sin nombre");
             tvRol.setText(dto.getRol() != null ? dto.getRol() : "Sin rol");
 
-            item.setOnClickListener(v -> entrarAlEquipo(dto.getIdEquipo()));
+            item.setOnClickListener(v -> entrarAlEquipo(dto));
             llEquipos.addView(item);
         }
     }
 
 
 
-    private void entrarAlEquipo(int idEquipo) {
-        // accion al pulsar sobre un equipo
-        Toast.makeText(this, "Entrando al equipo " + idEquipo, Toast.LENGTH_SHORT).show();
-        // Intent a la pantalla de detalle de equipo...
+    private void entrarAlEquipo(UsuarioEquipoDTO equipo) {
+        if (equipo == null) {
+            Toast.makeText(this, "Error: equipo no válido", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int idEquipo = equipo.getIdEquipo();
+        String rol = equipo.getRol(); // o donde tengas guardado el rol
+
+        Intent intent = new Intent(this, MainEquipoActivity.class);
+        intent.putExtra("idEquipo", idEquipo);
+        Log.d("HomeActivity", "🔑 idEquipo: " + idEquipo);
+        intent.putExtra("rol", rol);
+        startActivity(intent);
     }
+
 
 
     public void AnyadirEquipo(View view) {

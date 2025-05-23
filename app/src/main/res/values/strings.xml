@@ -15,4 +15,7 @@
         <item>Juvenil (17-19 años)</item>
         <item>Senior (+19)</item>
     </string-array>
+
+    <string name="navigation_drawer_open">Abrir menú de navegación</string>
+    <string name="navigation_drawer_close">Cerrar menú de navegación</string>
 </resources>

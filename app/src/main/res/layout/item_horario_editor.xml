@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/tvFechaSeleccionada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selecciona una fecha"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:padding="8dp" />
+
+    <!-- Botón de hora de quedada -->
+    <Button
+        android:id="@+id/btnHoraQuedada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar hora de quedada"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#2196F3"
+        android:layout_marginTop="8dp" />
+
+    <!-- Botón de hora de entreno -->
+    <Button
+        android:id="@+id/btnHoraEntreno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar hora de entreno"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#4CAF50"
+        android:layout_marginTop="8dp" />
+
+    <!-- Lugar -->
+    <EditText
+        android:id="@+id/etLugar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Lugar del entrenamiento"
+        android:inputType="text"
+        android:backgroundTint="#888888"
+        android:layout_marginTop="12dp" />
+</LinearLayout>

@@ -34,4 +34,13 @@ public interface ApiService {
     @POST("api/equipos/unirse")
     Call<Void> unirseAEquipo(@Body UnirseEquipoDTO dto);
 
+    @GET("api/horarios/equipo/{idEquipo}")
+    Call<List<Horario>> getHorariosPorEquipo(@Path("idEquipo") int idEquipo);
+
+    @POST("api/horarios/crear")
+    Call<Void> crearHorario(@Body Horario nuevoHorario);
+
+    @POST("api/horarios/guardar")
+    Call<Void> guardarHorarios(@Body List<Horario> horarios);
+
 }

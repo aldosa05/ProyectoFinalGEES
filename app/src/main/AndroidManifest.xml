@@ -50,6 +50,14 @@
             android:name=".HorarioActivity"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".ModificarHorarioActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".MainEquipoActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
