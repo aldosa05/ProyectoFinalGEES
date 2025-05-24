@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">ProyectoFinal</string>
     <string-array name="deportes_array">
-        <item>Fútbol</item>
-        <item>Fútbol sala</item>
+        <item>Futbol</item>
+        <item>Futbol sala</item>
         <item>Baloncesto</item>
     </string-array>
 

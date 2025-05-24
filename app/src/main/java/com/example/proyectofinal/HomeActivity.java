@@ -45,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
         String nombreUsuario = getIntent().getStringExtra("nombre_usuario");
         String correoUsuario = getIntent().getStringExtra("correo_usuario");
 
+
         Log.d("HomeActivity", "🔑 idUsuario: " + idUsuario);
         Log.d("HomeActivity", "👤 nombreUsuario: " + nombreUsuario);
         Log.d("HomeActivity", "📧 correoUsuario: " + correoUsuario);
@@ -107,12 +108,14 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         int idEquipo = equipo.getIdEquipo();
-        String rol = equipo.getRol(); // o donde tengas guardado el rol
-
+        String rol = equipo.getRol();
+        String deporte = equipo.getDeporte();
         Intent intent = new Intent(this, MainEquipoActivity.class);
         intent.putExtra("idEquipo", idEquipo);
         Log.d("HomeActivity", "🔑 idEquipo: " + idEquipo);
         intent.putExtra("rol", rol);
+        intent.putExtra("deporte", deporte);
+        Log.d("HomeActivity", "🔑 Deporte: " + deporte);
         startActivity(intent);
     }
 

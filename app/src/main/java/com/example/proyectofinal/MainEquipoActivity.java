@@ -22,6 +22,9 @@ public class MainEquipoActivity extends AppCompatActivity {
     private Toolbar toolbar;
     int idEquipo;
     String rol;
+
+    String deporte;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +42,8 @@ public class MainEquipoActivity extends AppCompatActivity {
 
         idEquipo = getIntent().getIntExtra("idEquipo", -1);
         Log.d("MainEquipoActivity", "🔑 idEquipo: " + idEquipo);
-
+        deporte = getIntent().getStringExtra("deporte");
+        Log.d("MainEquipoActivity", "🔑 Llega deporte: " + deporte);
         rol = getIntent().getStringExtra("rol");
         Menu menu = navView.getMenu();
 
@@ -55,7 +59,6 @@ public class MainEquipoActivity extends AppCompatActivity {
             menu.findItem(R.id.nav_pizarra).setVisible(false);
 
         }
-
 
 
         setSupportActionBar(toolbar);
@@ -106,9 +109,22 @@ public class MainEquipoActivity extends AppCompatActivity {
                 finish();
             } else if (itemId == R.id.nav_eliminar) {
                 Toast.makeText(this, "Equipo eliminado (TODO)", Toast.LENGTH_SHORT).show();
-            }
+            } else if (itemId == R.id.nav_pizarra) {
 
-            drawerLayout.closeDrawers();
+            PizarraFragment pizarraFragment = new PizarraFragment();
+
+            Bundle args = new Bundle();
+            args.putString("deporte", deporte);
+            Log.d("MainEquipoActivity", "🔑 Envio deporte: " + deporte);// pásale el deporte que recibiste
+            pizarraFragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, pizarraFragment)
+                    .commit();
+        }
+
+
+        drawerLayout.closeDrawers();
             return true;
         });
 

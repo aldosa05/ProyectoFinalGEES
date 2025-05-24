@@ -5,7 +5,7 @@ public class UsuarioEquipoDTO {
     private String rol;
     private int idEquipo;
     private String nombreEquipo;
-
+    private String deporte;
     public String getRol() {
         return rol;
     }
@@ -18,4 +18,23 @@ public class UsuarioEquipoDTO {
         return nombreEquipo;
     }
 
+    public void setRol(String rol) {
+        this.rol = rol;
+    }
+
+    public void setIdEquipo(int idEquipo) {
+        this.idEquipo = idEquipo;
+    }
+
+    public void setNombreEquipo(String nombreEquipo) {
+        this.nombreEquipo = nombreEquipo;
+    }
+
+    public String getDeporte() {
+        return deporte;
+    }
+
+    public void setDeporte(String deporte) {
+        this.deporte = deporte;
+    }
 }
