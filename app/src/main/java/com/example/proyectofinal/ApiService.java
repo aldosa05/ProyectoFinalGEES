@@ -5,6 +5,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -42,5 +43,35 @@ public interface ApiService {
 
     @POST("api/horarios/guardar")
     Call<Void> guardarHorarios(@Body List<Horario> horarios);
+
+    @GET("api/convocatorias/ultima/{idEquipo}")
+    Call<Convocatoria> getConvocatoriaPorEquipo(@Path("idEquipo") int idEquipo);
+
+
+    @POST("api/convocatorias/crear")
+    Call<Void> crearConvocatoria(@Body CrearConvocatoriaDTO dto);
+
+
+    @GET("/api/usuarios-equipo/{idEquipo}")
+    Call<List<Usuario>> obtenerJugadoresEquipo(@Path("idEquipo") int idEquipo);
+
+    @POST("/api/convocados/{idPartido}")
+    Call<Void> guardarConvocados(@Path("idPartido") int idPartido, @Body List<Integer> idsUsuarios);
+
+
+    @GET("api/convocados/lista/{idPartido}")
+    Call<List<Convocado>> getConvocadosPorPartido(@Path("idPartido") int idPartido);
+
+    @POST("convocados")
+    Call<Convocado> crearConvocado(@Body Convocado convocado);
+
+    @DELETE("api/convocatorias/eliminar/{idPartido}")
+    Call<Void> eliminarConvocatoria(@Path("idPartido") int idPartido);
+
+    @POST("api/convocados/agregar")
+    Call<Void> insertarConvocados(@Body List<ConvocadoRequest> convocados);
+
+
+
 
 }

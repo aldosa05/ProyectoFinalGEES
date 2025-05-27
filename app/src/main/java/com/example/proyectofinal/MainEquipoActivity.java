@@ -25,6 +25,8 @@ public class MainEquipoActivity extends AppCompatActivity {
 
     String deporte;
 
+    String NombreEquipo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,9 @@ public class MainEquipoActivity extends AppCompatActivity {
         deporte = getIntent().getStringExtra("deporte");
         Log.d("MainEquipoActivity", "🔑 Llega deporte: " + deporte);
         rol = getIntent().getStringExtra("rol");
+        NombreEquipo = getIntent().getStringExtra("NombreEquipo");
+        Log.d("MainEquipoActivity", "🔑 Llega NombreEquipo: " + NombreEquipo);
+
         Menu menu = navView.getMenu();
 
         if ("entrenador".equals(rol)) {
@@ -100,7 +105,17 @@ public class MainEquipoActivity extends AppCompatActivity {
                         .replace(R.id.content_frame, fragment)
                         .commit();
             } else if (itemId == R.id.nav_convocatoria) {
-                Toast.makeText(this, "Convocatoria próximamente", Toast.LENGTH_SHORT).show();
+                ConvocatoriaFragment convocatoriaFragment = new ConvocatoriaFragment();
+
+                Bundle args = new Bundle();
+                args.putInt("idEquipo", idEquipo);
+                args.putString("rol", rol);
+                args.putString("NombreEquipo", NombreEquipo);
+                convocatoriaFragment.setArguments(args);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, convocatoriaFragment)
+                        .commit();
             } else if (itemId == R.id.nav_coches) {
                 Toast.makeText(this, "Coches próximamente", Toast.LENGTH_SHORT).show();
             } else if (itemId == R.id.nav_multas) {

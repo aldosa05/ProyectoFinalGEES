@@ -110,11 +110,14 @@ public class HomeActivity extends AppCompatActivity {
         int idEquipo = equipo.getIdEquipo();
         String rol = equipo.getRol();
         String deporte = equipo.getDeporte();
+        String NombreEquipo= equipo.getNombreEquipo();
         Intent intent = new Intent(this, MainEquipoActivity.class);
         intent.putExtra("idEquipo", idEquipo);
         Log.d("HomeActivity", "🔑 idEquipo: " + idEquipo);
         intent.putExtra("rol", rol);
         intent.putExtra("deporte", deporte);
+        intent.putExtra("NombreEquipo", NombreEquipo);
+        Log.d("HomeActivity", "🔑 NombreEquipo: " + NombreEquipo);
         Log.d("HomeActivity", "🔑 Deporte: " + deporte);
         startActivity(intent);
     }

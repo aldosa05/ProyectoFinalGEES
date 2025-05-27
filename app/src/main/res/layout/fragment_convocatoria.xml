@@ -25,15 +25,13 @@
             android:layout_marginBottom="16dp" />
 
         <!-- Lista de convocados (se llena dinámicamente) -->
-        <GridLayout
+        <LinearLayout
             android:id="@+id/grid_jugadores"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:useDefaultMargins="true"
-            android:alignmentMode="alignMargins"
-            android:rowOrderPreserved="false"
+            android:orientation="vertical"
             android:layout_marginBottom="24dp" />
+
 
         <!-- Nombres de equipos en lugar de imágenes -->
         <LinearLayout
@@ -126,5 +124,21 @@
             android:textColor="#FFFFFF"
             android:layout_marginBottom="12dp"
             android:visibility="gone" />
+        <Button
+            android:id="@+id/btnAnadirJugadores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="➕ Añadir Jugadores"
+            android:visibility="gone" />
+        <Button
+            android:id="@+id/btnEliminarConvocatoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🗑️ Eliminar Convocatoria"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#B00020"/>
+
     </LinearLayout>
 </ScrollView>
