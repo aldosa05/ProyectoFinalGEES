@@ -2,7 +2,7 @@ package com.example.proyectofinal;
 
 public class Horario {
 
-
+    private int id;
     private String dia;
     private String hora_quedada;
     private String hora_entreno;
@@ -18,6 +18,15 @@ public class Horario {
     }
 
     // Getters y Setters
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDia() {
         return dia;

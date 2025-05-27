@@ -1,6 +1,7 @@
 package com.example.proyectofinal;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -115,14 +116,65 @@ public class HorarioFragment extends Fragment {
     }
 
     private void mostrarHorarios(List<Horario> horarios) {
-        listaHorarios.removeAllViews();
+        listaHorarios.removeAllViews(); // limpia los anteriores
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
 
         for (Horario h : horarios) {
-            TextView tv = new TextView(getContext());
-            tv.setText(h.getDia() + " - Quedada: " + h.getHora_quedada() + ", Entreno: " + h.getHora_entreno() + ", Lugar: " + h.getLugar());
-            tv.setPadding(8, 16, 8, 16);
-            tv.setTextSize(16);
-            listaHorarios.addView(tv);
+            View itemView = inflater.inflate(R.layout.item_horario, listaHorarios, false);
+
+            TextView tvFecha = itemView.findViewById(R.id.tvFecha);
+            TextView tvLugar = itemView.findViewById(R.id.tvLugar);
+            TextView tvQuedada = itemView.findViewById(R.id.tvQuedada);
+            TextView tvEntreno = itemView.findViewById(R.id.tvEntreno);
+            Button btnEliminar = itemView.findViewById(R.id.btnEliminarHorario);
+
+            tvFecha.setText("🗓️ " + h.getDia());
+            tvLugar.setText("📍 Lugar: " + h.getLugar());
+            tvQuedada.setText("⏰ Quedada: " + h.getHora_quedada());
+            tvEntreno.setText("🏋️ Entreno: " + h.getHora_entreno());
+
+            if ("entrenador".equalsIgnoreCase(rol)) {
+                btnEliminar.setVisibility(View.VISIBLE);
+                btnEliminar.setOnClickListener(v -> confirmarEliminarHorario(h.getId()));
+            }else {
+                btnEliminar.setVisibility(View.GONE);
+            }
+
+
+            listaHorarios.addView(itemView);
         }
     }
+
+    private void confirmarEliminarHorario(int idHorario) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Eliminar horario")
+                .setMessage("¿Estás seguro de que deseas eliminar este horario?")
+                .setPositiveButton("Eliminar", (dialog, which) -> eliminarHorario(idHorario))
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+
+    private void eliminarHorario(int idHorario) {
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.eliminarHorario(idHorario).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Horario eliminado", Toast.LENGTH_SHORT).show();
+                    cargarHorarios();
+                } else {
+                    Toast.makeText(getContext(), "Error al eliminar horario", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(getContext(), "Error de red", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }

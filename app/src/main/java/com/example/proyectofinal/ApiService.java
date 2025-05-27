@@ -38,6 +38,10 @@ public interface ApiService {
     @GET("api/horarios/equipo/{idEquipo}")
     Call<List<Horario>> getHorariosPorEquipo(@Path("idEquipo") int idEquipo);
 
+    @DELETE("api/horarios/eliminar/{id}")
+    Call<Void> eliminarHorario(@Path("id") int idHorario);
+
+
     @POST("api/horarios/crear")
     Call<Void> crearHorario(@Body Horario nuevoHorario);
 
