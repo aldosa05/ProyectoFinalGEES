@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialogCrearCocheLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <EditText
+        android:id="@+id/etNombreConductor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre del conductor"
+        android:inputType="textPersonName"
+        android:drawableStart="@android:drawable/ic_menu_edit"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@android:drawable/editbox_background_normal" />
+
+    <EditText
+        android:id="@+id/etNumeroPlazas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Número de plazas"
+        android:inputType="number"
+        android:drawableStart="@android:drawable/ic_menu_agenda"
+        android:padding="12dp"
+        android:background="@android:drawable/editbox_background_normal" />
+
+</LinearLayout>

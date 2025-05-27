@@ -71,7 +71,20 @@ public interface ApiService {
     @POST("api/convocados/agregar")
     Call<Void> insertarConvocados(@Body List<ConvocadoRequest> convocados);
 
+    @GET("api/coches")
+    Call<List<CocheConOcupantesDTO>> obtenerCochesConOcupantes();
 
+    @POST("api/coches/crear")
+    Call<Coche> crearCoche(@Body Coche coche);
+
+    @POST("api/coches/ocupante")
+    Call<OcupanteCoche> anadirOcupante(@Body OcupanteCoche ocupante);
+
+    @DELETE("api/coches/{id}")
+    Call<Void> eliminarCoche(@Path("id") int id);
+
+    @GET("api/coches/equipo/{idEquipo}")
+    Call<List<CocheConOcupantesDTO>> obtenerCochesPorEquipo(@Path("idEquipo") int idEquipo);
 
 
 }

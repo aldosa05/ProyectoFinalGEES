@@ -117,7 +117,22 @@ public class MainEquipoActivity extends AppCompatActivity {
                         .replace(R.id.content_frame, convocatoriaFragment)
                         .commit();
             } else if (itemId == R.id.nav_coches) {
-                Toast.makeText(this, "Coches próximamente", Toast.LENGTH_SHORT).show();
+                CochesFragment cochesFragment = new CochesFragment();
+
+                Bundle args = new Bundle();
+                args.putInt("idEquipo", idEquipo);
+                args.putString("rol", rol);
+                args.putString("categoria", "senior"); // ¡Usa la real si la tienes! Ej: desde login
+
+                cochesFragment.setArguments(args);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, cochesFragment)
+                        .commit();
+
+                navView.setCheckedItem(R.id.nav_coches);
+
+
             } else if (itemId == R.id.nav_multas) {
                 Toast.makeText(this, "Multas próximamente", Toast.LENGTH_SHORT).show();
             } else if (itemId == R.id.nav_salir) {
