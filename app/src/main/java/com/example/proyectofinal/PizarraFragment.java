@@ -37,6 +37,9 @@ public class PizarraFragment extends Fragment implements FichaConfigBottomSheet.
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        requireActivity().setTitle("Pizarra");
+
         pistaImage = view.findViewById(R.id.pista_image);
         btnConfigurar = view.findViewById(R.id.btn_config_pizarra);
         rootLayout = view.findViewById(R.id.pizarra_root);

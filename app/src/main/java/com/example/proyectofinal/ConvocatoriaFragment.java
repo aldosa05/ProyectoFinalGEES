@@ -50,6 +50,9 @@ public class ConvocatoriaFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        requireActivity().setTitle("Convocatoria");
+
         // Obtener argumentos
         if (getArguments() != null) {
             idEquipo = getArguments().getInt("idEquipo", -1);

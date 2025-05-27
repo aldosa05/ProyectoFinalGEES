@@ -15,7 +15,6 @@
         android:id="@+id/tituloHorario"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="HORARIO"
         android:textSize="32sp"
         android:textStyle="bold"
         android:textColor="#000000"

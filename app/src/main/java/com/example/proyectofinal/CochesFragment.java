@@ -62,6 +62,8 @@ public class CochesFragment extends Fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        requireActivity().setTitle("Coches");
+
         recyclerViewCoches = view.findViewById(R.id.recyclerViewCoches);
         btnAñadirCoche = view.findViewById(R.id.btnAñadirCoche);
 

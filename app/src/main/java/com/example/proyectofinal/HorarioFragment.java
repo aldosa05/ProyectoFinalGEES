@@ -47,7 +47,7 @@ public class HorarioFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        requireActivity().setTitle("Horarios");
         // INSETS para status bar
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.horario), (v, insets) -> {
             int type = WindowInsetsCompat.Type.systemBars();
