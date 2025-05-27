@@ -29,6 +29,11 @@ public interface ApiService {
     @GET("api/usuariosEquipos/usuario/{idUsuario}/equiposInfo")
     Call<List<UsuarioEquipoDTO>> getEquiposInfo(@Path("idUsuario") int idUsuario);
 
+    @DELETE("api/usuariosEquipos/eliminar/{idUsuario}/{idEquipo}")
+    Call<Void> eliminarRelacionUsuarioEquipo(@Path("idUsuario") int idUsuario, @Path("idEquipo") int idEquipo);
+
+
+
     @POST("api/equipos/crear")
     Call<Equipo> crearEquipo(@Body CrearEquipoDTO crearEquipoDTO);
 
@@ -90,5 +95,17 @@ public interface ApiService {
     @GET("api/coches/equipo/{idEquipo}")
     Call<List<CocheConOcupantesDTO>> obtenerCochesPorEquipo(@Path("idEquipo") int idEquipo);
 
+    // 🔄 MULTAS
+    @GET("api/multas/{idEquipo}")
+    Call<List<Multa>> obtenerMultas(@Path("idEquipo") int idEquipo);
+
+    @POST("api/multas")
+    Call<Multa> crearMulta(@Body Multa multa);
+
+    @PUT("api/multas/pagar/{idMulta}")
+    Call<Void> marcarMultaPagada(@Path("idMulta") int idMulta);
+
+    @DELETE("api/multas/{idMulta}")
+    Call<Void> eliminarMulta(@Path("idMulta") int idMulta);
 
 }

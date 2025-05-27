@@ -111,12 +111,19 @@ public class HomeActivity extends AppCompatActivity {
         String rol = equipo.getRol();
         String deporte = equipo.getDeporte();
         String NombreEquipo= equipo.getNombreEquipo();
+        boolean UsaMultas = equipo.isUsaMultas();
+
+
+
         Intent intent = new Intent(this, MainEquipoActivity.class);
         intent.putExtra("idEquipo", idEquipo);
         Log.d("HomeActivity", "🔑 idEquipo: " + idEquipo);
         intent.putExtra("rol", rol);
         intent.putExtra("deporte", deporte);
         intent.putExtra("NombreEquipo", NombreEquipo);
+        intent.putExtra("usaMultas",UsaMultas);
+        intent.putExtra("idUsuario", idUsuario);
+        Log.d("HomeActivity", "🔑 Enviando idUsuario: " + idUsuario);
         Log.d("HomeActivity", "🔑 NombreEquipo: " + NombreEquipo);
         Log.d("HomeActivity", "🔑 Deporte: " + deporte);
         startActivity(intent);

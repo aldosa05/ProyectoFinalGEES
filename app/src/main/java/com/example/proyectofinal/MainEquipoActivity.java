@@ -1,5 +1,6 @@
 package com.example.proyectofinal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,6 +16,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.navigation.NavigationView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainEquipoActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -26,6 +31,9 @@ public class MainEquipoActivity extends AppCompatActivity {
     String deporte;
 
     String NombreEquipo;
+
+    boolean usaMultas;
+    private int idUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,8 @@ public class MainEquipoActivity extends AppCompatActivity {
 
         idEquipo = getIntent().getIntExtra("idEquipo", -1);
         Log.d("MainEquipoActivity", "🔑 idEquipo: " + idEquipo);
+        idUsuario = getIntent().getIntExtra("idUsuario", -1);
+        Log.d("MainEquipoActivity", "🔑 idEquipo: " + idUsuario);
         deporte = getIntent().getStringExtra("deporte");
         Log.d("MainEquipoActivity", "🔑 Llega deporte: " + deporte);
         rol = getIntent().getStringExtra("rol");
@@ -56,15 +66,23 @@ public class MainEquipoActivity extends AppCompatActivity {
             // El entrenador ve todo
         } else if ("jugador".equals(rol)) {
             // Ocultar opciones solo para entrenadores
-            menu.findItem(R.id.nav_asistencia).setVisible(false);
+
             menu.findItem(R.id.nav_pizarra).setVisible(false);
         } else if ("familiar".equals(rol)) {
             // Ocultar opciones que no aplican a familiares
-            menu.findItem(R.id.nav_asistencia).setVisible(false);
+
             menu.findItem(R.id.nav_pizarra).setVisible(false);
 
         }
 
+
+        usaMultas = getIntent().getBooleanExtra("usaMultas", false);
+
+        if (usaMultas) {
+            menu.findItem(R.id.nav_multas).setVisible(true);
+        } else {
+            menu.findItem(R.id.nav_multas).setVisible(false);
+        }
 
         setSupportActionBar(toolbar);
 
@@ -134,11 +152,23 @@ public class MainEquipoActivity extends AppCompatActivity {
 
 
             } else if (itemId == R.id.nav_multas) {
-                Toast.makeText(this, "Multas próximamente", Toast.LENGTH_SHORT).show();
+                MultasFragment multasFragment = new MultasFragment();
+
+                Bundle args = new Bundle();
+                args.putInt("idEquipo", idEquipo);
+                args.putString("rol", rol);
+                multasFragment.setArguments(args);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, multasFragment)
+                        .commit();
+
+                navView.setCheckedItem(R.id.nav_multas);
+
             } else if (itemId == R.id.nav_salir) {
                 finish();
             } else if (itemId == R.id.nav_eliminar) {
-                Toast.makeText(this, "Equipo eliminado (TODO)", Toast.LENGTH_SHORT).show();
+                eliminarRelacionUsuarioEquipo();
             } else if (itemId == R.id.nav_pizarra) {
 
             PizarraFragment pizarraFragment = new PizarraFragment();
@@ -158,6 +188,33 @@ public class MainEquipoActivity extends AppCompatActivity {
             return true;
         });
 
+    }
+
+
+    private void eliminarRelacionUsuarioEquipo() {
+        ApiService api = RetrofitClient.getApiService();
+
+        Log.d("MainEquipoActivity", "🔑 en eliminar llega id equipo: " + idEquipo);
+        Log.d("MainEquipoActivity", "🔑 en eliminar llega id usuario: " + idUsuario);
+
+        api.eliminarRelacionUsuarioEquipo(idUsuario, idEquipo).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(MainEquipoActivity.this, "Te has salido del equipo", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainEquipoActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish(); // vuelve a HomeActivity
+                } else {
+                    Toast.makeText(MainEquipoActivity.this, "Error al salir del equipo", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MainEquipoActivity.this, "Error de red", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

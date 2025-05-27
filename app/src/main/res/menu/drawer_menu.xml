@@ -18,10 +18,6 @@
         android:title="Pizarra" />
 
     <item
-        android:id="@+id/nav_asistencia"
-        android:title="Asistencia" />
-
-    <item
         android:id="@+id/nav_multas"
         android:title="Multas" />
 

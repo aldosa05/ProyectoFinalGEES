@@ -6,6 +6,18 @@ public class UsuarioEquipoDTO {
     private int idEquipo;
     private String nombreEquipo;
     private String deporte;
+
+    private boolean usaMultas;
+
+    public boolean isUsaMultas() {
+        return usaMultas;
+    }
+
+    public void setUsaMultas(boolean usaMultas) {
+        this.usaMultas = usaMultas;
+    }
+
+
     public String getRol() {
         return rol;
     }
