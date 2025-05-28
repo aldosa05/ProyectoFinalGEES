@@ -1,6 +1,7 @@
 package com.example.proyectofinal;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +66,10 @@ public class MultasFragment extends Fragment implements MultaAdapter.OnMultaList
         btnCrear.setOnClickListener(v -> {
             CrearMultaDialogFragment dialog = new CrearMultaDialogFragment(multa -> {
                 multa.setIdEquipo(idEquipo);
+                // 🔍 LOG PARA VERIFICAR nombreJugador
+                Log.d("MultasFragment", "🧑 Nombre del jugador: " + multa.getNombreJugador());
+                Log.d("🚀 MULTA_JSON", new Gson().toJson(multa));
+
                 crearMulta(multa);
             });
             dialog.show(getChildFragmentManager(), "crear_multa");

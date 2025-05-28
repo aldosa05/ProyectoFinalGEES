@@ -14,11 +14,19 @@
 
     <EditText
         android:id="@+id/etMonto"
-        android:hint="Monto (€)"
+        android:hint="Dinero (€)"
         android:inputType="numberDecimal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"/>
+
+    <EditText
+        android:id="@+id/etNombreJugador"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre del jugador"
+        android:inputType="textPersonName"/>
+
 
     <Button
         android:id="@+id/btnFechaMulta"

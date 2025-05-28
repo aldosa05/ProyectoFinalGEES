@@ -18,6 +18,9 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.MultaViewHol
     private boolean esEntrenador;
     private OnMultaListener listener;
 
+
+
+
     public interface OnMultaListener {
         void onEliminarMulta(int idMulta);
         void onMarcarPagada(int idMulta);
@@ -41,6 +44,7 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.MultaViewHol
         Multa multa = multas.get(position);
         holder.tvMotivo.setText(multa.getMotivo());
         holder.tvMonto.setText("💰 Monto: " + multa.getMonto() + "€");
+        holder.tvNombreJugador.setText("👤 Jugador: " + multa.getNombreJugador());
         holder.tvFecha.setText("📅 Asignada: " + multa.getFechaAsignacion());
         holder.tvEstado.setText(multa.isPagada() ? "✅ Pagada" : "⛔ Sin pagar");
         holder.tvEstado.setTextColor(multa.isPagada() ? Color.parseColor("#388E3C") : Color.RED);
@@ -64,7 +68,7 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.MultaViewHol
     }
 
     public static class MultaViewHolder extends RecyclerView.ViewHolder {
-        TextView tvMotivo, tvMonto, tvFecha, tvEstado;
+        TextView tvMotivo, tvMonto, tvFecha, tvEstado, tvNombreJugador;;
         Button btnPagar, btnEliminar;
 
         public MultaViewHolder(@NonNull View itemView) {
@@ -72,6 +76,7 @@ public class MultaAdapter extends RecyclerView.Adapter<MultaAdapter.MultaViewHol
             tvMotivo = itemView.findViewById(R.id.tvMotivo);
             tvMonto = itemView.findViewById(R.id.tvMonto);
             tvFecha = itemView.findViewById(R.id.tvFecha);
+            tvNombreJugador = itemView.findViewById(R.id.tvNombreJugador);
             tvEstado = itemView.findViewById(R.id.tvEstado);
             btnPagar = itemView.findViewById(R.id.btnPagar);
             btnEliminar = itemView.findViewById(R.id.btnEliminar);

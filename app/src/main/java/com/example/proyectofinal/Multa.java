@@ -1,5 +1,7 @@
 package com.example.proyectofinal;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Multa {
     private int idMulta;
     private int idEquipo;
@@ -7,6 +9,13 @@ public class Multa {
     private double monto;
     private boolean pagada;
     private String fechaAsignacion;
+
+    @SerializedName("nombreJugador")
+    private String nombreJugador;
+
+
+
+
 
     // Getters y Setters
     public int getIdMulta() { return idMulta; }
@@ -26,5 +35,13 @@ public class Multa {
 
     public String getFechaAsignacion() { return fechaAsignacion; }
     public void setFechaAsignacion(String fechaAsignacion) { this.fechaAsignacion = fechaAsignacion; }
+
+    public String getNombreJugador() {
+        return nombreJugador;
+    }
+
+    public void setNombreJugador(String nombreJugador) {
+        this.nombreJugador = nombreJugador;
+    }
 }
 

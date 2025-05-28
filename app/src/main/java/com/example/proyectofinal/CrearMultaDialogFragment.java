@@ -26,7 +26,7 @@ public class CrearMultaDialogFragment extends DialogFragment {
 
     private OnMultaCreadaListener listener;
 
-    private EditText etMotivo, etMonto;
+    private EditText etMotivo, etMonto, etNombreJugador ;
     private Button btnFecha, btnGuardar;
     private LocalDate fechaSeleccionada;
 
@@ -47,6 +47,7 @@ public class CrearMultaDialogFragment extends DialogFragment {
 
         etMotivo = view.findViewById(R.id.etMotivo);
         etMonto = view.findViewById(R.id.etMonto);
+        etNombreJugador = view.findViewById(R.id.etNombreJugador);
         btnFecha = view.findViewById(R.id.btnFechaMulta);
         btnGuardar = view.findViewById(R.id.btnGuardarMulta);
 
@@ -55,8 +56,9 @@ public class CrearMultaDialogFragment extends DialogFragment {
         btnGuardar.setOnClickListener(v -> {
             String motivo = etMotivo.getText().toString();
             String montoStr = etMonto.getText().toString();
+            String nombreJugador = etNombreJugador.getText().toString().trim();
 
-            if (motivo.isEmpty() || montoStr.isEmpty() || fechaSeleccionada == null) {
+            if (motivo.isEmpty() || montoStr.isEmpty() || fechaSeleccionada == null || nombreJugador.isEmpty() ) {
                 Toast.makeText(getContext(), "Completa todos los campos", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -68,6 +70,7 @@ public class CrearMultaDialogFragment extends DialogFragment {
             nueva.setMonto(monto);
             nueva.setFechaAsignacion(fechaSeleccionada.toString()); // YYYY-MM-DD
             nueva.setPagada(false);
+            nueva.setNombreJugador(nombreJugador);
 
             listener.onMultaCreada(nueva);
             dismiss();
