@@ -27,28 +27,34 @@ import retrofit2.Response;
 
 public class HorarioFragment extends Fragment {
 
+    // 🧱 Referencias UI
     private LinearLayout listaHorarios;
     private Button btnModificar;
+
+    // 📦 Variables recibidas por argumentos
     private int idEquipo;
     private String rol;
 
     public HorarioFragment() {
-        // Constructor vacío requerido
+        // Constructor obligatorio vacío
     }
 
+    // 🧩 Inflamos el layout principal desde un XML compartido con la actividad
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_horario, container, false); // Usamos mismo layout
+        return inflater.inflate(R.layout.activity_horario, container, false);
     }
 
+    // 🎯 Lógica de inicialización y eventos
     @SuppressLint("MissingInflatedId")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().setTitle("Horarios");
-        // INSETS para status bar
+
+        // 🧱 Acomoda padding según las barras del sistema (Edge-to-Edge)
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.horario), (v, insets) -> {
             int type = WindowInsetsCompat.Type.systemBars();
             v.setPadding(
@@ -60,13 +66,13 @@ public class HorarioFragment extends Fragment {
             return insets;
         });
 
-        // 🔄 Obtener datos pasados por arguments
+        // 📦 Cargamos datos enviados desde el fragmento anterior
         if (getArguments() != null) {
             idEquipo = getArguments().getInt("idEquipo", -1);
-            Log.d("HorarioFragment", "🔑 idEquipo: " + idEquipo);
             rol = getArguments().getString("rol", null);
         }
 
+        // ❌ Validación temprana
         if (idEquipo == -1 || rol == null) {
             Toast.makeText(getContext(), "Datos insuficientes", Toast.LENGTH_SHORT).show();
             requireActivity().finish();
@@ -75,15 +81,16 @@ public class HorarioFragment extends Fragment {
 
         Log.d("HorarioFragment", "🔑 idEquipo: " + idEquipo + " | rol: " + rol);
 
-        // Inicializar vistas
+        // 🎯 Vinculamos elementos de la vista
         btnModificar = view.findViewById(R.id.btnModificarHorario);
         listaHorarios = view.findViewById(R.id.listaHorarios);
 
-        // Mostrar u ocultar botón según rol
+        // 🔐 Mostrar el botón solo si es entrenador
         if (!"entrenador".equalsIgnoreCase(rol)) {
             btnModificar.setVisibility(View.GONE);
         }
 
+        // 📝 Abrir actividad de modificación
         btnModificar.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), ModificarHorarioActivity.class);
             intent.putExtra("idEquipo", idEquipo);
@@ -91,9 +98,13 @@ public class HorarioFragment extends Fragment {
             startActivity(intent);
         });
 
+        // 🔄 Cargar horarios al iniciar
         cargarHorarios();
     }
 
+    /**
+     * 🔁 Llama a la API para obtener horarios del equipo
+     */
     private void cargarHorarios() {
         ApiService apiService = RetrofitClient.getApiService();
         Call<List<Horario>> call = apiService.getHorariosPorEquipo(idEquipo);
@@ -102,7 +113,7 @@ public class HorarioFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Horario>> call, Response<List<Horario>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    mostrarHorarios(response.body());
+                    mostrarHorarios(response.body()); // ✅ Renderizar lista
                 } else {
                     Toast.makeText(getContext(), "Error cargando horarios", Toast.LENGTH_SHORT).show();
                 }
@@ -115,8 +126,11 @@ public class HorarioFragment extends Fragment {
         });
     }
 
+    /**
+     * 🧱 Renderiza dinámicamente la lista de horarios
+     */
     private void mostrarHorarios(List<Horario> horarios) {
-        listaHorarios.removeAllViews(); // limpia los anteriores
+        listaHorarios.removeAllViews(); // 🧼 Limpiar lista anterior
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
@@ -129,23 +143,27 @@ public class HorarioFragment extends Fragment {
             TextView tvEntreno = itemView.findViewById(R.id.tvEntreno);
             Button btnEliminar = itemView.findViewById(R.id.btnEliminarHorario);
 
+            // 📅 Mostrar datos
             tvFecha.setText("🗓️ " + h.getDia());
             tvLugar.setText("📍 Lugar: " + h.getLugar());
             tvQuedada.setText("⏰ Quedada: " + h.getHora_quedada());
             tvEntreno.setText("🏋️ Entreno: " + h.getHora_entreno());
 
+            // 🔐 Si es entrenador, se permite eliminar
             if ("entrenador".equalsIgnoreCase(rol)) {
                 btnEliminar.setVisibility(View.VISIBLE);
                 btnEliminar.setOnClickListener(v -> confirmarEliminarHorario(h.getId()));
-            }else {
+            } else {
                 btnEliminar.setVisibility(View.GONE);
             }
 
-
-            listaHorarios.addView(itemView);
+            listaHorarios.addView(itemView); // ➕ Agregamos al layout
         }
     }
 
+    /**
+     * 🔒 Muestra diálogo de confirmación antes de eliminar un horario
+     */
     private void confirmarEliminarHorario(int idHorario) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Eliminar horario")
@@ -155,7 +173,9 @@ public class HorarioFragment extends Fragment {
                 .show();
     }
 
-
+    /**
+     * ❌ Llama al endpoint para borrar un horario concreto
+     */
     private void eliminarHorario(int idHorario) {
         ApiService apiService = RetrofitClient.getApiService();
         apiService.eliminarHorario(idHorario).enqueue(new Callback<Void>() {
@@ -163,7 +183,7 @@ public class HorarioFragment extends Fragment {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(getContext(), "Horario eliminado", Toast.LENGTH_SHORT).show();
-                    cargarHorarios();
+                    cargarHorarios(); // 🔁 Refrescar la lista
                 } else {
                     Toast.makeText(getContext(), "Error al eliminar horario", Toast.LENGTH_SHORT).show();
                 }
@@ -175,6 +195,5 @@ public class HorarioFragment extends Fragment {
             }
         });
     }
-
-
 }
+

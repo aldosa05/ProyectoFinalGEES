@@ -14,15 +14,17 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
+    // 🔐 Login de usuario
     @POST("api/usuarios/login")
     Call<Usuario> login(@Body Usuario usuario);
 
-    // Usamos Usuario como respuesta
+    // 🔐 Cambio de contraseña
     @PUT("api/usuarios/cambiarContrasena")
     Call<ResponseBody> cambiarContrasena(@Body CambioContrasenaRequest request);
+    // 🧑 Registro de nuevo usuario
     @POST("api/usuarios/registro")
     Call<Void> registrarUsuario(@Body Usuario usuario);
-
+    // 📦 Relaciones usuario-equipo
     @GET("api/usuariosEquipos/usuario/{idUsuario}")
     Call<List<UsuarioEquipo>> getMisEquipos(@Path("idUsuario") int idUsuario);
 
@@ -33,13 +35,14 @@ public interface ApiService {
     Call<Void> eliminarRelacionUsuarioEquipo(@Path("idUsuario") int idUsuario, @Path("idEquipo") int idEquipo);
 
 
-
+    // 🏗️ Crear y unir equipo
     @POST("api/equipos/crear")
     Call<Equipo> crearEquipo(@Body CrearEquipoDTO crearEquipoDTO);
 
     @POST("api/equipos/unirse")
     Call<Void> unirseAEquipo(@Body UnirseEquipoDTO dto);
 
+    // 🕒 Horarios
     @GET("api/horarios/equipo/{idEquipo}")
     Call<List<Horario>> getHorariosPorEquipo(@Path("idEquipo") int idEquipo);
 
@@ -53,6 +56,7 @@ public interface ApiService {
     @POST("api/horarios/guardar")
     Call<Void> guardarHorarios(@Body List<Horario> horarios);
 
+    // 📅 Convocatorias
     @GET("api/convocatorias/ultima/{idEquipo}")
     Call<Convocatoria> getConvocatoriaPorEquipo(@Path("idEquipo") int idEquipo);
 
@@ -60,7 +64,7 @@ public interface ApiService {
     @POST("api/convocatorias/crear")
     Call<Void> crearConvocatoria(@Body CrearConvocatoriaDTO dto);
 
-
+    // 👥 Gestión de usuarios y convocados
     @GET("/api/usuarios-equipo/{idEquipo}")
     Call<List<Usuario>> obtenerJugadoresEquipo(@Path("idEquipo") int idEquipo);
 
@@ -80,6 +84,7 @@ public interface ApiService {
     @POST("api/convocados/agregar")
     Call<Void> insertarConvocados(@Body List<ConvocadoRequest> convocados);
 
+    // 🚗 Coches y ocupantes
     @GET("api/coches")
     Call<List<CocheConOcupantesDTO>> obtenerCochesConOcupantes();
 

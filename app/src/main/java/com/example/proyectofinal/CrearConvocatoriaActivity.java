@@ -30,7 +30,9 @@ import retrofit2.Response;
 
 public class CrearConvocatoriaActivity extends AppCompatActivity {
 
+    // 🆔 ID del equipo al que se le creará la convocatoria
     private int idEquipo;
+    // 🏷 Nombre del equipo (solo visual)
     private String nombreEquipo;
 
     @Override
@@ -46,23 +48,28 @@ public class CrearConvocatoriaActivity extends AppCompatActivity {
 
 
 
+        // 📦 Recuperamos parámetros que vienen por Intent
         idEquipo = getIntent().getIntExtra("idEquipo", -1);
         nombreEquipo = getIntent().getStringExtra("NombreEquipo");
 
+        // 🧱 Validación de integridad de datos recibidos
         if (idEquipo == -1 || nombreEquipo == null) {
             Toast.makeText(this, "Faltan datos para crear la convocatoria", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
+        // 🖋 Seteamos el nombre del equipo local
         TextView tvEquipo = findViewById(R.id.tvEquipoLocal);
         tvEquipo.setText(nombreEquipo);
 
 
+        // 🔧 Inicialización del resto de componentes UI
         inicializarUI();
     }
 
     private void inicializarUI() {
+        // 🔌 Referencias a vistas
         EditText etLugar = findViewById(R.id.etLugar);
         EditText etRival = findViewById(R.id.etEquipoRival);
         TextView tvFecha = findViewById(R.id.tvFechaSeleccionada);
@@ -121,9 +128,11 @@ public class CrearConvocatoriaActivity extends AppCompatActivity {
             }
             dto.setHoraPartido(horaPartido);
             dto.setHoraQuedada(horaQuedada);
+            // 🔍 Logging de datos antes de enviar
             Log.d("DTO-CREAR", "📤 " + new Gson().toJson(dto));
 
 
+            // 📡 Llamada al backend
             ApiService api = RetrofitClient.getApiService();
             Call<Void> call = api.crearConvocatoria(dto);
             call.enqueue(new Callback<Void>() {
@@ -147,6 +156,7 @@ public class CrearConvocatoriaActivity extends AppCompatActivity {
         });
     }
 
+    // 🔄 Picker reutilizable de hora
     private void mostrarTimePicker(String title, Button button) {
         MaterialTimePicker picker = new MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)

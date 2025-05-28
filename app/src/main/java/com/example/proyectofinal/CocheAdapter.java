@@ -17,14 +17,15 @@ import java.util.List;
 
 public class CocheAdapter extends RecyclerView.Adapter<CocheAdapter.CocheViewHolder> {
 
-    private List<CocheConOcupantesDTO> coches;
-    private final OnCocheClickListener listener;
+    private List<CocheConOcupantesDTO> coches;// Lista de coches a mostrar
+    private final OnCocheClickListener listener;// Interface para manejar clicks
 
+    // Interface para delegar acciones (botones de eliminar/agregar)
     public interface OnCocheClickListener {
         void onEliminarCoche(int position);
         void onAgregarPasajero(int position);
     }
-
+    // Constructor que recibe la lista y el listener de eventos
     public CocheAdapter(List<CocheConOcupantesDTO> coches, OnCocheClickListener listener) {
         this.coches = coches;
         this.listener = listener;
@@ -33,6 +34,7 @@ public class CocheAdapter extends RecyclerView.Adapter<CocheAdapter.CocheViewHol
     @NonNull
     @Override
     public CocheViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Infla el layout XML de cada item del RecyclerView
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_coche, parent, false);
         return new CocheViewHolder(view);
@@ -48,7 +50,7 @@ public class CocheAdapter extends RecyclerView.Adapter<CocheAdapter.CocheViewHol
 
         // Limpiar layout y volver a inflar ocupantes
         holder.layoutPasajeros.removeViews(1, holder.layoutPasajeros.getChildCount() - 1);
-
+        // Agrega dinámicamente los pasajeros al LinearLayout
         for (String ocupante : coche.getOcupantes()) {
             TextView tvPasajero = new TextView(context);
             tvPasajero.setText("- " + ocupante);
@@ -60,7 +62,9 @@ public class CocheAdapter extends RecyclerView.Adapter<CocheAdapter.CocheViewHol
         }
 
         // Acciones botones
+        // Botón ➕ agrega pasajero
         holder.btnAgregar.setOnClickListener(v -> listener.onAgregarPasajero(position));
+        // Botón ❌ elimina coche
         holder.btnCerrar.setOnClickListener(v -> listener.onEliminarCoche(position));
     }
 
@@ -69,6 +73,7 @@ public class CocheAdapter extends RecyclerView.Adapter<CocheAdapter.CocheViewHol
         return coches.size();
     }
 
+    // ViewHolder que guarda referencias a los elementos del layout item_coche
     public static class CocheViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitulo;

@@ -19,13 +19,16 @@ import androidx.fragment.app.Fragment;
 
 public class PizarraFragment extends Fragment implements FichaConfigBottomSheet.FichaConfigListener {
 
+    // Vistas de la UI
     private ImageView pistaImage;
     private Button btnConfigurar;
     private ConstraintLayout rootLayout;
+
+    // Tipo de deporte que se usará para cargar la pista adecuada
     private String deporte;
 
     public PizarraFragment() {
-        // Constructor vacío requerido
+        // Constructor vacío obligatorio para Fragment
     }
 
     @Nullable
@@ -37,31 +40,34 @@ public class PizarraFragment extends Fragment implements FichaConfigBottomSheet.
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
         requireActivity().setTitle("Pizarra");
 
+        // Referencias a componentes del layout
         pistaImage = view.findViewById(R.id.pista_image);
         btnConfigurar = view.findViewById(R.id.btn_config_pizarra);
         rootLayout = view.findViewById(R.id.pizarra_root);
 
+        // Obtener el tipo de deporte (por defecto: Futbol)
         if (getArguments() != null) {
-            deporte = getArguments().getString("deporte", "Futbol"); // por defecto
+            deporte = getArguments().getString("deporte", "Futbol");
         }
 
         Log.d("PizarraFragment", "🔑 Deporte: " + deporte);
 
+        // Carga la imagen del campo de juego según el deporte
         cargarImagenCampo();
 
+        // Abre bottom sheet para seleccionar fichas
         btnConfigurar.setOnClickListener(v -> {
             FichaConfigBottomSheet bottomSheet = new FichaConfigBottomSheet();
-            bottomSheet.setFichaConfigListener(this); // 👉 importante
+            bottomSheet.setFichaConfigListener(this); // Comunicación Fragment <-> BottomSheet
             bottomSheet.show(getParentFragmentManager(), "ficha_config");
         });
     }
 
     private void cargarImagenCampo() {
+        // Switch manual por string para setear imagen según deporte
         int resId;
-
         if ("Futbol".equalsIgnoreCase(deporte)) {
             resId = R.drawable.campo_futbol;
         } else if ("Futbol sala".equalsIgnoreCase(deporte)) {
@@ -69,15 +75,16 @@ public class PizarraFragment extends Fragment implements FichaConfigBottomSheet.
         } else if ("Baloncesto".equalsIgnoreCase(deporte)) {
             resId = R.drawable.campo_baloncesto;
         } else {
-            resId = R.drawable.ic_launcher_background;
+            resId = R.drawable.ic_launcher_background; // Fallback visual
         }
 
         pistaImage.setImageResource(resId);
     }
 
+    // Callback que se ejecuta al cerrar el BottomSheet con selección de fichas
     @Override
     public void onConfigurarFichas(int azules, int rojas, int balones) {
-        // 🧹 Limpia las fichas actuales (sin tocar imagen ni botón)
+        // Elimina todas las fichas anteriores, pero no borra imagen ni botón
         for (int i = rootLayout.getChildCount() - 1; i >= 0; i--) {
             View child = rootLayout.getChildAt(i);
             if (child != pistaImage && child != btnConfigurar) {
@@ -85,7 +92,7 @@ public class PizarraFragment extends Fragment implements FichaConfigBottomSheet.
             }
         }
 
-        // 🔁 Agrega nuevas fichas
+        // Crea y agrega las fichas solicitadas
         for (int i = 0; i < azules; i++) agregarFicha(Color.BLUE);
         for (int i = 0; i < rojas; i++) agregarFicha(Color.RED);
         for (int i = 0; i < balones; i++) agregarFicha(Color.BLACK);
@@ -94,19 +101,18 @@ public class PizarraFragment extends Fragment implements FichaConfigBottomSheet.
     @SuppressLint("ClickableViewAccessibility")
     private void agregarFicha(int tipo) {
         View ficha;
-
         int size = 100;
         ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(size, size);
 
         if (tipo == Color.BLACK) {
-            // ⚽ Balón con imagen
+            // Balón → imagen personalizada
             ImageView balon = new ImageView(requireContext());
-            balon.setImageResource(R.drawable.ic_balon); // ← Asegúrate de tener esta imagen
+            balon.setImageResource(R.drawable.ic_balon); // Asegúrate de tener este recurso
             balon.setScaleType(ImageView.ScaleType.FIT_CENTER);
             balon.setBackground(null);
             ficha = balon;
         } else {
-            // 🔵 🔴 Fichas redondas con color
+            // Jugadores → círculos de color (azul/rojo)
             View circulo = new View(requireContext());
             GradientDrawable bg = new GradientDrawable();
             bg.setShape(GradientDrawable.OVAL);
@@ -116,9 +122,12 @@ public class PizarraFragment extends Fragment implements FichaConfigBottomSheet.
         }
 
         ficha.setLayoutParams(params);
+
+        // Posición inicial aleatoria en el área visible (ajustada para evitar solapamiento con botones)
         ficha.setX((float) (Math.random() * (rootLayout.getWidth() - size)));
         ficha.setY((float) (Math.random() * (rootLayout.getHeight() - size - 200)));
 
+        // Drag & drop con touch listener
         ficha.setOnTouchListener(new View.OnTouchListener() {
             float dX, dY;
 
@@ -140,5 +149,5 @@ public class PizarraFragment extends Fragment implements FichaConfigBottomSheet.
 
         rootLayout.addView(ficha);
     }
-
 }
+

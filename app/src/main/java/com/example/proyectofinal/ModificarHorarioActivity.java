@@ -31,53 +31,59 @@ import retrofit2.Call;
 
 public class ModificarHorarioActivity extends AppCompatActivity {
 
+    // Layout que contendrá los bloques de horarios
     private LinearLayout horariosContainer;
     private LayoutInflater inflater;
+
+    // Lista de horarios a guardar
     private List<Horario> horarios = new ArrayList<>();
 
+    // Parámetros recibidos por Intent
     private int idEquipo;
     private String rol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        EdgeToEdge.enable(this); // soporte visual edge-to-edge
         setContentView(R.layout.activity_modificar_horario);
+
+        // Aplicar insets para evitar solapamientos con status/navigation bar
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.layoutModificarHorario), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
+        // Inicialización de referencias
         horariosContainer = findViewById(R.id.horariosContainer);
         inflater = LayoutInflater.from(this);
 
-        // Recuperar datos del Intent
+        // Obtener idEquipo y rol del Intent
         idEquipo = getIntent().getIntExtra("idEquipo", -1);
-        Log.d("HomeActivity", "🔑 idEquipo: " + idEquipo);
-
         rol = getIntent().getStringExtra("rol");
 
         if (idEquipo == -1 || rol == null) {
             Toast.makeText(this, "Datos insuficientes", Toast.LENGTH_SHORT).show();
-            finish();
+            finish(); // termina actividad si no hay datos clave
             return;
         }
-
     }
 
+    // Añadir dinámicamente un nuevo bloque de horario
     public void AnyadirDiaDeEntrene(View view) {
-
         View horarioView = inflater.inflate(R.layout.item_horario_editor, horariosContainer, false);
 
         TextView tvFecha = horarioView.findViewById(R.id.tvFechaSeleccionada);
         Button btnHoraQuedada = horarioView.findViewById(R.id.btnHoraQuedada);
         Button btnHoraEntreno = horarioView.findViewById(R.id.btnHoraEntreno);
 
+        // Variables para capturar la fecha/hora seleccionadas
         final Calendar[] selectedDate = new Calendar[1];
         final int[] selectedHour = new int[1];
         final int[] selectedMinute = new int[1];
 
+        // 📅 Selector de fecha
         tvFecha.setOnClickListener(v -> {
             Calendar now = Calendar.getInstance();
             DatePickerDialog dpd = new DatePickerDialog(this, (view1, year, month, dayOfMonth) -> {
@@ -89,6 +95,7 @@ public class ModificarHorarioActivity extends AppCompatActivity {
             dpd.show();
         });
 
+        // ⏰ Selector de hora de quedada
         btnHoraQuedada.setOnClickListener(v -> {
             MaterialTimePicker picker = new MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_24H)
@@ -106,6 +113,7 @@ public class ModificarHorarioActivity extends AppCompatActivity {
             });
         });
 
+        // ⏰ Selector de hora de entreno
         btnHoraEntreno.setOnClickListener(v -> {
             MaterialTimePicker picker = new MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_24H)
@@ -122,24 +130,26 @@ public class ModificarHorarioActivity extends AppCompatActivity {
                 btnHoraEntreno.setText(String.format(Locale.getDefault(), "%02d:%02d", selectedHour[0], selectedMinute[0]));
             });
         });
-        horariosContainer.addView(horarioView);
 
+        // Agregar la vista inflada al contenedor principal
+        horariosContainer.addView(horarioView);
     }
 
+    // Guardar todos los horarios creados
     public void GuardarHorarios(View view) {
-        horarios.clear(); // Limpia lista previa
+        horarios.clear(); // Limpia la lista anterior
 
         int total = horariosContainer.getChildCount();
         for (int i = 0; i < total; i++) {
             View horarioView = horariosContainer.getChildAt(i);
 
-            // Buscar views dentro del layout inflado
+            // Buscar las vistas necesarias
             EditText etLugar = horarioView.findViewById(R.id.etLugar);
             TextView tvFecha = horarioView.findViewById(R.id.tvFechaSeleccionada);
             Button btnHoraQuedada = horarioView.findViewById(R.id.btnHoraQuedada);
             Button btnHoraEntreno = horarioView.findViewById(R.id.btnHoraEntreno);
 
-
+            // Validaciones
             if (etLugar == null || tvFecha == null || btnHoraQuedada == null || btnHoraEntreno == null) {
                 Toast.makeText(this, "Error al leer los datos del horario #" + (i + 1), Toast.LENGTH_SHORT).show();
                 return;
@@ -155,22 +165,20 @@ public class ModificarHorarioActivity extends AppCompatActivity {
                 return;
             }
 
-            Horario horario =   new Horario(fecha, horaQuedada, horaEntreno, lugar, idEquipo);
-
+            // Crear objeto Horario y agregarlo a la lista
+            Horario horario = new Horario(fecha, horaQuedada, horaEntreno, lugar, idEquipo);
             horarios.add(horario);
         }
 
-        // Aquí podrías enviar la lista al backend
+        // 🧪 Log de validación y serialización
         Toast.makeText(this, "Se han guardado " + horarios.size() + " horarios.", Toast.LENGTH_SHORT).show();
-
-        // Log para revisar
         for (Horario h : horarios) {
             Log.d("GUARDADO", "📅 " + h.getDia() + ", 🕓 " + h.getHora_quedada() + "/" + h.getHora_entreno() + " 📍" + h.getLugar() + " 🆔 idEquipo=" + h.getId_equipo());
         }
-
         Gson gson = new Gson();
         Log.d("JSON-SENT", gson.toJson(horarios));
 
+        // 📡 Envío al servidor vía Retrofit
         ApiService api = RetrofitClient.getApiService();
         Call<Void> call = api.guardarHorarios(horarios);
         call.enqueue(new retrofit2.Callback<Void>() {
@@ -178,12 +186,14 @@ public class ModificarHorarioActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(ModificarHorarioActivity.this, "Horarios guardados exitosamente", Toast.LENGTH_SHORT).show();
+
+                    // Redirigir al MainEquipoActivity tras guardar
                     Intent intent = new Intent(ModificarHorarioActivity.this, MainEquipoActivity.class);
                     intent.putExtra("idEquipo", idEquipo);
                     intent.putExtra("rol", rol);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-                    finish(); // Vuelve atrás
+                    finish();
                 } else {
                     Toast.makeText(ModificarHorarioActivity.this, "Error al guardar horarios", Toast.LENGTH_SHORT).show();
                 }
@@ -194,7 +204,6 @@ public class ModificarHorarioActivity extends AppCompatActivity {
                 Toast.makeText(ModificarHorarioActivity.this, "Fallo de red: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
     }
-
 }
+
